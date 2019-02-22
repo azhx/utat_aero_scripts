@@ -1,5 +1,6 @@
 import json;
 import tkinter;
+import PIL.Image, PIL.ImageTk
 #written by Alex Zhuang zhual@utschools.ca
 with open('inputmap.json', 'r') as f:
     inputmap = json.load(f)
@@ -9,12 +10,16 @@ with open('inputsurveyphotos.json', 'r') as f:
 print (inputmap)
 print (inputsurveyphotos)
 top = tkinter.Tk()
-C = tkinter.Canvas(top, bg="blue", height=250, width=300)
+img = PIL.Image.open("test.jpg");
+height, width = img.size
+canvas = tkinter.Canvas(top, width = width, height = height)
+canvas.pack()
 
-coord = 10, 50, 240, 210
-arc = C.create_arc(coord, start=0, extent=150, fill="red")
+photo =PIL.ImageTk.PhotoImage(img)
 
-C.pack()
+canvas.create_image(0, 0, image=photo, anchor=tkinter.NW)
+
+canvas.pack()
 def callback(event):
     print ("clicked at", event.x, event.y)
 
