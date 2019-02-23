@@ -1,4 +1,4 @@
-{"topleft": {"long":123.5421, "lat":543.1233},
- "bottomright": {"long":54.23451, "lat":53.32151},
- "filename": "map.jpg"
+{"topleft": {"long":-79.393549, "lat" :43.665497},
+ "bottomright": {"long":-79.391549, "lat":43.664320},
+ "filename": "test.jpg"
 }
