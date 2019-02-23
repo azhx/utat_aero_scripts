@@ -1,25 +1,43 @@
-import json;
-import tkinter;
+import json
+import tkinter
+import argparse
 import PIL.Image, PIL.ImageTk
 from tkinter import messagebox
 from PIL import ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
-#written by Alex Zhuang zhual@utschools.ca
-with open('inputmap.json', 'r') as f:
+#written by Alex Zhuang zhual@utschools.ca 2019/02/23
+
+parser = argparse.ArgumentParser(description='You must specify paths to two jsons')
+parser.add_argument("--map", help = 'valid path to the reference map json', type = str)
+parser.add_argument("--photos", help = 'valid path to the survey photos json', type = str)
+args = parser.parse_args()
+mappath = args.map
+photopath = args.photos
+
+with open(mappath, 'r') as f:
     inputmap = json.load(f)
-with open('inputsurveyphotos.json', 'r') as f:
+with open(photopath, 'r') as f:
     inputsurveyphotos = json.load(f)
 
-global index, basewidth
+global index, basewidth, out
 index = 0
 basewidth = 300
 
+out = {'damaged':[]}
 
 print (inputmap)
 print (inputsurveyphotos)
 
+def output():
+    global out
+    with open('idsignificantchanges.json', 'w') as outfile:
+        json.dump(out, outfile)
+    top.destroy()
+
+
 top = tkinter.Tk()
+top.protocol("WM_DELETE_WINDOW", output)
 
 
 img = PIL.Image.open(inputmap['filename']);
@@ -63,8 +81,13 @@ def clicked(event):
         t.pack()
 
         def save():
+            global index
             desc = t.get("1.0", 'end-1c')
-            print(desc)
+            out['damaged'].append({'lat': lat,
+                                    'long': long,
+                                    'message': desc,
+                                    'filename': inputsurveyphotos[index]})
+            print (out)
             second.destroy()
 
         button = tkinter.Button(second, text="Save and Quit", command=save)
